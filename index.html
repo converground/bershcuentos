@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BershCuentos - Monitor de Promociones</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="logo">&#128293;</span>
+            <h1>Bersh<span>Cuentos</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard" class="active">Dashboard</a>
+            <a href="#tracker">Mis Links</a>
+            <a href="#calendar">Calendario</a>
+            <a href="#alerts">Alertas</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="dashboard" class="section active">
+            <div class="hero">
+                <h2>Encuentra las mejores ofertas antes que nadie</h2>
+                <p>Monitoreamos Bershka y Pull & Bear para avisarte cuando los precios se desploman</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon bershka-icon">B</div>
+                    <div class="stat-info">
+                        <h3 id="bershka-status">Cargando...</h3>
+                        <p>Bershka</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pnb-icon">P</div>
+                    <div class="stat-info">
+                        <h3 id="pnb-status">Cargando...</h3>
+                        <p>Pull & Bear</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon fire-icon">&#128293;</div>
+                    <div class="stat-info">
+                        <h3 id="deals-count">0</h3>
+                        <p>Ofertas &gt;90% activas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon clock-icon">&#128337;</div>
+                    <div class="stat-info">
+                        <h3 id="next-sale">--</h3>
+                        <p>Próxima temporada de rebajas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deals-section">
+                <h2>&#128293; Ofertas Activas Ahora</h2>
+                <div id="active-deals" class="deals-grid">
+                    <div class="loading-state">Verificando ofertas disponibles...</div>
+                </div>
+            </div>
+
+            <div class="phase-alerts">
+                <h2>&#128680; Estado de las Temporadas</h2>
+                <div id="season-status" class="phase-grid">
+                </div>
+            </div>
+        </section>
+
+        <section id="tracker" class="section">
+            <div class="section-header">
+                <h2>&#128279; Mis Links</h2>
+                <p>Pega los enlaces de productos de Bershka o Pull & Bear y monitorearemos su precio</p>
+            </div>
+
+            <div class="tracker-form">
+                <div class="input-group">
+                    <input type="text" id="product-url" placeholder="https://www.bershka.com/... o https://www.pullandbear.com/..." />
+                    <select id="product-store">
+                        <option value="auto">Auto-detectar</option>
+                        <option value="bershka">Bershka</option>
+                        <option value="pullandbear">Pull & Bear</option>
+                    </select>
+                    <select id="product-category">
+                        <option value="all">Toda la tienda</option>
+                        <option value="hombres">Hombres</option>
+                        <option value="mujeres">Mujeres</option>
+                        <option value="kids">Kids</option>
+                        <option value="accesorios">Accesorios</option>
+                    </select>
+                    <button id="add-product-btn" class="btn-primary">Agregar</button>
+                </div>
+                <div class="notification-options">
+                    <label><input type="checkbox" id="notify-start" checked> &#128227; Avisar cuando empiece la promoción</label>
+                    <label><input type="checkbox" id="notify-ending" checked> &#9888;&#65039; Avisar cuando esté terminando</label>
+                    <label><input type="checkbox" id="notify-90" checked> &#128293; Avisar si supera 90% de descuento</label>
+                </div>
+            </div>
+
+            <div id="tracked-products" class="tracked-list">
+            </div>
+        </section>
+
+        <section id="calendar" class="section">
+            <div class="section-header">
+                <h2>&#128197; Calendario de Rebajas 2025-2026</h2>
+                <p>Temporadas de rebajas conocidas de Inditex (Bershka y Pull & Bear)</p>
+            </div>
+            <div id="calendar-grid" class="calendar-container">
+            </div>
+        </section>
+
+        <section id="alerts" class="section">
+            <div class="section-header">
+                <h2>&#128276; Centro de Alertas</h2>
+                <p>Recibe notificaciones por email cuando detectemos descuentos brutales</p>
+            </div>
+
+            <div class="alert-form-container">
+                <form id="alert-form" class="alert-form">
+                    <h3>Suscribirse a Alertas</h3>
+                    <div class="form-group">
+                        <label for="alert-email">Tu email</label>
+                        <input type="email" id="alert-email" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-name">Tu nombre</label>
+                        <input type="text" id="alert-name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tiendas a monitorear</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="sub-bershka" checked> Bershka</label>
+                            <label><input type="checkbox" id="sub-pnb" checked> Pull & Bear</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Secciones de interes</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="sub-hombres" checked> Hombres</label>
+                            <label><input type="checkbox" id="sub-mujeres" checked> Mujeres</label>
+                            <label><input type="checkbox" id="sub-kids"> Kids</label>
+                            <label><input type="checkbox" id="sub-accesorios"> Accesorios</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de alerta</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="alert-type-start" checked> &#128227; Inicio de rebajas</label>
+                            <label><input type="checkbox" id="alert-type-ending" checked> &#9888;&#65039; Rebajas terminando</label>
+                            <label><input type="checkbox" id="alert-type-90" checked> &#128293; Descuentos &gt;90%</label>
+                            <label><input type="checkbox" id="alert-type-flash"> &#9889; Flash Sales</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Activar Alertas</button>
+                </form>
+            </div>
+
+            <div id="alert-history" class="alert-history">
+                <h3>Historial de Alertas Recientes</h3>
+                <div id="alerts-list" class="alerts-list">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>BershCuentos &copy; 2026 - Monitoreo automatizado de promociones Inditex</p>
+        <p class="footer-note">Este sitio no esta afiliado con Bershka ni Pull & Bear. Es una herramienta independiente.</p>
+    </footer>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

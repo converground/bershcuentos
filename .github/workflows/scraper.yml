@@ -1,0 +1,41 @@
+name: Scraper de Promociones
+
+on:
+  schedule:
+    # Ejecutar cada 30 minutos
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Permite ejecutar manualmente
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install axios cheerio dotenv 2>/dev/null || (mkdir -p node_modules && npm init -y >/dev/null 2>&1 && npm install axios cheerio dotenv)
+
+      - name: Ejecutar scraper
+        env:
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
+          EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
+          EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+        run: node scraper/index.js
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --quiet && git diff --cached --quiet || git commit -m "Actualizar ofertas: $(date +'%Y-%m-%d %H:%M')"
+          git push
